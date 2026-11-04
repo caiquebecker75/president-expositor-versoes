@@ -28,7 +28,7 @@ QA: `?static` (sem movimento), `?draft`, `?desktop`, `?ar=2.2`. Ferramentas em `
 
 - `assets/img/capa/`: parmesão da capa, gerado no ChatGPT, sem marca nem embalagem.
 - `assets/img/versoes/`: as versões enviadas pelo cliente (com as cotas 140 × 40 × 30 cm).
-- `assets/img/loja/`: fotomontagens geradas no ChatGPT a partir da foto real do ponto na Festval (`atual.webp`) e de cada versão, alinhadas à foto atual por `tools/align.cjs`. São simulações; produtos e embalagens são ilustrativos.
+- `assets/img/loja/`: fotomontagens geradas no ChatGPT a partir da foto real do ponto na Festval (`atual.webp`) e de cada versão, alinhadas à foto atual por `tools/align.cjs`. Na do MDF, `tools/retoque-mdf.cjs` tira o pé de cima da base preta da gôndola vizinha, com o chão e a base vindos da montagem do Aramado, então a base ali não curva como na foto real. São simulações; produtos e embalagens são ilustrativos.
 - `assets/img/ar/`: um QR por versão, apontando para a página de AR.
 - Os originais (PNG) ficam fora do repositório (`.gitignore`).
 
