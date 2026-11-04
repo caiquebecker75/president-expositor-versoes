@@ -1,5 +1,5 @@
 /* =========================================================================
-   Expositor Président · 4 versões × 75LAB · motor da apresentação
+   Expositor Président · 3 versões × 75LAB · motor da apresentação
    HTML, CSS e JS puros, sem dependências.
    Teclas: ← → (ou espaço) navegam · M índice · F tela cheia · Home/End.
    QA: ?static (sem movimento) · ?draft (mostra telas em rascunho) · ?desktop · ?ar=2.2
@@ -96,7 +96,6 @@ function layoutAnat() {
 const LOJA = {
   mdf: { nome: 'MDF', notas: ['A madeira clara conversa com o piso e as gôndolas da Festval.', 'A marca aparece no topo, na lateral e no rodapé.', 'O ralado fica em três fileiras, separado por gramatura.'] },
   aramado: { nome: 'Aramado', notas: ['O preto sai do caminho e deixa as embalagens em primeiro plano.', 'O painel lateral com parmesão e massa chama quem vem pelo corredor.', 'Cestos com faixa de preço para cada produto.'] },
-  acm: { nome: 'ACM', notas: ['O champanhe reflete a luz da loja e destaca o ponto.', 'O acrílico deixa todas as embalagens à vista.', 'Marca nas três alturas, de frente e de lado.'] },
   metalon: { nome: 'Metalon', notas: ['Moldura amadeirada com filete dourado, no padrão da loja.', 'Estrutura firme, que não balança com o movimento do corredor.', 'Ganchos dourados alinhados por gramatura.'] },
 };
 const cmp = $('#cmp');
@@ -130,6 +129,54 @@ if (cmp) {
 }
 
 /* ---------------------------------------------------------------------
+   Realidade aumentada: 3D na tela e QR para o celular
+   Visualizador, fundo e modelos vêm da página de AR da 75LAB (mesmo domínio),
+   então qualquer ajuste feito lá já aparece aqui. Só carrega ao entrar na tela.
+   --------------------------------------------------------------------- */
+const AR_BASE = 'https://projetos.75lab.com.br/ar/';
+const AR_PAGE = AR_BASE + 'lactalis-president-displays-parmesao/';
+const AR = {
+  mdf: { id: 'pr01', nome: 'MDF', apelido: 'Madeira Curva' },
+  aramado: { id: 'pr04', nome: 'Aramado', apelido: 'Aramado Preto' },
+  metalon: { id: 'pr03', nome: 'Metalon', apelido: 'Madeira e Dourado' },
+};
+const arView = $('#arView');
+let arTab = 'mdf', arAberto = false, arPre = false, arLib = null;
+const arUrl = (t, sufixo) => `${AR_PAGE}${AR[t].id}${sufixo}?v=1`;
+const arAviso = () => { $('#arHint').textContent = '3D indisponível: confira a conexão. O código funciona no celular.'; $('#arProg').classList.add('done'); };
+const carregarMV = () => (arLib ||= import(AR_BASE + 'vendor/model-viewer.min.js').catch(arAviso));
+function arBarra(p) { $('#arProg i').style.width = Math.round(p * 100) + '%'; $('#arProg').classList.toggle('done', p >= 1); }
+function arModelo() {
+  arBarra(0);
+  arView.setAttribute('poster', arUrl(arTab, '-poster.webp'));
+  arView.setAttribute('alt', `Expositor Président versão ${AR[arTab].nome} em 3D`);
+  arView.setAttribute('src', arUrl(arTab, '.glb'));
+}
+function setAr(t) {
+  if (!AR[t]) return;
+  arTab = t;
+  $$('.ar-tabs [data-ar]').forEach(b => b.setAttribute('aria-selected', b.dataset.ar === t));
+  $('#arQr').src = `assets/img/ar/qr-${t}.svg`;
+  $$('[data-ar-link]').forEach(a => { a.href = `${AR_PAGE}?modelo=${AR[t].id}`; });
+  $('#arNome').innerHTML = `<b>${AR[t].nome}</b>${AR[t].apelido}`;
+  if (arAberto) arModelo();
+}
+function arFoco(on) { // gira só com a tela visível; sai de cena sem gastar a placa de vídeo
+  if (on) {
+    if (!arAberto) { arAberto = true; carregarMV(); arModelo(); }
+    if (!RM) arView.setAttribute('auto-rotate', '');
+  } else if (!mobile) arView.removeAttribute('auto-rotate');
+}
+arView.addEventListener('progress', e => arBarra(e.detail.totalProgress));
+arView.addEventListener('error', arAviso);
+arView.addEventListener('load', () => { // deixa as outras versões prontas para a troca ser imediata
+  if (mobile || arPre) return;
+  arPre = true;
+  Object.keys(AR).forEach(t => fetch(arUrl(t, '.glb'), { mode: 'cors' }).catch(() => {}));
+});
+$$('.ar-tabs [data-ar]').forEach(b => b.addEventListener('click', () => setAr(b.dataset.ar)));
+
+/* ---------------------------------------------------------------------
    Lightbox
    --------------------------------------------------------------------- */
 const lb = $('#lb');
@@ -154,6 +201,7 @@ function activate(s) {
 function onEnter(s) {
   if (s.id === 'padrao') requestAnimationFrame(layoutAnat);
   if (s.id === 'loja' && !RM) sweep();
+  arFoco(s.id === 'ar');
 }
 function show(next, dir) {
   if (!next || next === cur || busy) return;
@@ -191,11 +239,12 @@ document.addEventListener('click', e => {
   const g = e.target.closest('[data-goto]'); if (!g) return;
   e.preventDefault(); closeMenu();
   if (g.dataset.tab) setTab(g.dataset.tab, false);
+  if (g.dataset.ar) setAr(g.dataset.ar);
   go(g.dataset.goto);
 });
 // clique nas bordas da tela (fora de elementos interativos) volta ou avança
 stage.addEventListener('click', e => {
-  if (mobile || e.target.closest('button,a,[data-goto],[data-zoom],.cmp,.tabs,.anat')) return;
+  if (mobile || e.target.closest('button,a,[data-goto],[data-zoom],.cmp,.tabs,.anat,.ar-3d,.ar-qr')) return;
   const r = stage.getBoundingClientRect(), x = (e.clientX - r.left) / r.width;
   if (x < .12) step(-1); else if (x > .88) step(1);
 });
@@ -238,7 +287,7 @@ if (!mobile) {
   let tx = 0, ty = 0, tt = 0;
   stage.addEventListener('touchstart', e => { const p = e.changedTouches[0]; tx = p.clientX; ty = p.clientY; tt = Date.now(); }, { passive: true });
   stage.addEventListener('touchend', e => {
-    if (e.target.closest('.cmp')) return;
+    if (e.target.closest('.cmp,.ar-3d')) return;
     const p = e.changedTouches[0], dx = p.clientX - tx, dy = p.clientY - ty;
     if (Date.now() - tt < 800 && Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.3) step(dx < 0 ? 1 : -1);
   }, { passive: true });
@@ -263,5 +312,6 @@ const start = document.getElementById(location.hash.slice(1));
 show(start && slides.includes(start) ? start : slides[0], 1);
 (document.fonts?.ready || Promise.resolve()).then(layout);
 addEventListener('load', layout);
+addEventListener('load', () => setTimeout(carregarMV, 1500)); // visualizador 3D pronto antes de chegar na tela
 addEventListener('hashchange', () => { const t = document.getElementById(location.hash.slice(1)); if (t && t !== cur && slides.includes(t)) go(t); });
 })();

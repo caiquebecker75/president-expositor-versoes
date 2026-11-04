@@ -13,7 +13,7 @@ const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.
 const srv = http.createServer((q, s) => { let f = path.join(ROOT, decodeURIComponent(q.url.split('?')[0])); if (f.endsWith(path.sep)) f += 'index.html'; if (!fs.existsSync(f)) { s.writeHead(404); return s.end(); } s.writeHead(200, { 'Content-Type': MIME[path.extname(f)] || 'application/octet-stream' }); fs.createReadStream(f).pipe(s); }).listen(8131);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const port = 9341;
-const chrome = spawn('C:/Program Files/Google/Chrome/Application/chrome.exe', ['--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${path.resolve('tools/_qa/chrome')}`, '--hide-scrollbars', 'about:blank'], { stdio: 'ignore' });
+const chrome = spawn('C:/Program Files/Google/Chrome/Application/chrome.exe', ['--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${path.resolve('tools/_qa/chrome')}`, '--hide-scrollbars', '--enable-unsafe-swiftshader', 'about:blank'], { stdio: 'ignore' });
 for (let i = 0; i < 60; i++) { try { if ((await fetch(`http://127.0.0.1:${port}/json/version`)).ok) break; } catch { } await sleep(250); }
 const t = await (await fetch(`http://127.0.0.1:${port}/json/new?about:blank`, { method: 'PUT' })).json();
 const ws = new WebSocket(t.webSocketDebuggerUrl); await new Promise(r => ws.onopen = r);
@@ -37,6 +37,7 @@ if (mobile) {
   for (const s of ids) {
     await send('Runtime.evaluate', { expression: `location.hash='${s}'` });
     await sleep(900);
+    if (s === 'ar') for (let i = 0; i < 80; i++) { if ((await send('Runtime.evaluate', { expression: `!!document.getElementById('arView').loaded`, returnByValue: true })).result.result.value) { await sleep(1200); break; } await sleep(500); }
     const shot = await send('Page.captureScreenshot', { format: 'jpeg', quality: 80 });
     fs.writeFileSync(path.join(out, `${W}-${s}.jpg`), Buffer.from(shot.result.data, 'base64'));
   }

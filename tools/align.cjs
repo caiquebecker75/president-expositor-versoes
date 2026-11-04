@@ -23,7 +23,7 @@ const keep = (x, y) => x < 175 / k || x > 720 / k;
 
 (async () => {
   const ref = await small(await sharp(path.join(IMG, 'src', 'atual.png')).resize(W, H, { fit: 'cover' }).png().toBuffer());
-  for (const id of ['mdf', 'aramado', 'acm', 'metalon']) {
+  for (const id of ['mdf', 'aramado', 'metalon']) {
     const src = path.join(IMG, 'loja', `loja-${id}.png`);
     const base = await sharp(src).resize(W, H, { fit: 'cover' }).png().toBuffer();
     let best = { e: Infinity };

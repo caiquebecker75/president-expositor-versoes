@@ -1,5 +1,5 @@
 /* =========================================================================
-   Expositor Président · 4 versões × 75LAB · sistema visual
+   Expositor Président · 3 versões × 75LAB · sistema visual
    Ateliê escuro: o chocolate das próprias imagens, vermelho Président e
    filetes dourados. Bodoni Moda nos títulos (itálico na ideia-chave),
    Figtree no texto. Transição de cortina lateral.
@@ -73,18 +73,20 @@ html.static .rv, html.m .rv { opacity: 1 !important; transform: none !important;
 html.static .pin, html.static .anat-lines, html.static .anat-tags li { animation: none !important; }
 
 /* ------------------------------------------------------------- 01 capa */
-.capa { display: flex; flex-direction: column; justify-content: space-between; }
-.capa-txt { display: grid; grid-template-columns: 1fr auto; column-gap: 60px; align-items: end; }
-.capa-txt .eyebrow { grid-column: 1 / -1; margin-bottom: 18px; }
-.capa h1 { grid-column: 1; max-width: 13.5em; font-size: 78px; }
-.capa .lede { grid-column: 1; margin-top: 18px; max-width: 36em; }
-.capa-legenda { grid-column: 2; grid-row: 2 / 4; align-self: end; display: grid; grid-template-columns: auto auto; gap: 8px 26px; font-size: 18px; color: var(--muted); }
-.capa-legenda b { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--gold); margin-right: 8px; }
-.lineup { flex: 1; min-height: 0; display: flex; justify-content: center; gap: 26px; margin-top: 30px; }
-.lu { position: relative; height: 100%; aspect-ratio: 1005 / 1565; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); cursor: pointer; box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .7); transition: transform .5s var(--ez), border-color .3s; }
-.lu img { width: 100%; height: 100%; object-fit: cover; }
-.lu:hover { transform: translateY(-6px); border-color: var(--line2); }
-.lu figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 14px 12px; font-family: var(--serif); font-size: 26px; font-style: italic; background: linear-gradient(transparent, rgba(12, 8, 6, .85)); }
+.capa { display: flex; align-items: center; background: linear-gradient(0deg, #2b1409 0, #190905 15%, #0e0402 44%); }
+.capa-foto {
+  position: absolute; right: 0; bottom: 0; width: max(1349px, 72%); max-width: none; height: auto; min-height: 100%;
+  object-fit: cover; object-position: 100% 100%; transform-origin: 72% 62%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 24%); mask-image: linear-gradient(90deg, transparent 0, #000 24%);
+}
+.slide.is-in .capa-foto { animation: capaFoto 18s var(--ez) both; }
+@keyframes capaFoto { from { transform: scale(1.05); } to { transform: none; } }
+html.static .capa-foto { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .capa-foto { animation: none !important; } }
+.capa-txt { position: relative; max-width: 660px; margin-left: calc((100% - 1456px) * .22); }
+.capa-txt .eyebrow { margin-bottom: 26px; }
+.capa h1 { font-size: 92px; }
+.capa .lede { margin-top: 26px; max-width: 25.5em; text-wrap: balance; }
 
 /* ------------------------------------------------------------- 02 hoje */
 .hoje { display: flex; gap: 76px; align-items: center; }
@@ -117,7 +119,7 @@ html.static .pin, html.static .anat-lines, html.static .anat-tags li { animation
 .slide.is-in .anat-lines, .slide.is-in .anat-tags li { animation: fadein .6s ease both; animation-delay: calc(var(--d, 0) * 80ms + 600ms); }
 @keyframes fadein { from { opacity: 0; } }
 
-/* ------------------------------------------------------------- 04–07 versões */
+/* ------------------------------------------------------------- 04–06 versões */
 .versao { display: flex; gap: 64px; align-items: center; }
 .ver-fig { height: 100%; aspect-ratio: 1005 / 1565; flex: none; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); cursor: zoom-in; box-shadow: 0 40px 80px -40px rgba(0, 0, 0, .8); }
 .ver-fig img { width: 100%; height: 100%; object-fit: cover; }
@@ -138,12 +140,14 @@ html.static .pin, html.static .anat-lines, html.static .anat-tags li { animation
 .ver-loja { align-self: flex-start; display: flex; align-items: center; gap: 14px; padding: 7px 18px 7px 7px; border: 1px solid var(--line2); border-radius: 14px; background: rgba(255, 255, 255, .03); text-align: left; font-size: 14px; color: var(--muted); transition: background .3s, border-color .3s; }
 .ver-loja:hover { background: rgba(216, 178, 110, .1); border-color: var(--gold); }
 .ver-loja img { width: 46px; height: 72px; object-fit: cover; border-radius: 8px; }
+.ver-acoes { display: flex; flex-wrap: wrap; gap: 14px; align-self: flex-start; }
+.ver-ar svg { flex: none; width: 46px; height: 72px; padding: 0 9px; border-radius: 8px; background: rgba(216, 178, 110, .13); fill: none; stroke: var(--gold2); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .ver-loja b { display: block; font-size: 17px; color: var(--cream); font-weight: 600; }
 
 /* ------------------------------------------------------------- 08 loja */
 .loja { display: flex; gap: 46px; align-items: center; }
 .loja-txt { flex: 0 0 470px; display: flex; flex-direction: column; gap: 18px; }
-.tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+.tabs { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 8px; }
 .tabs button { display: flex; gap: 12px; align-items: center; padding: 8px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255, 255, 255, .02); text-align: left; transition: border-color .3s, background .3s; }
 .tabs button img { width: 52px; height: 81px; object-fit: cover; border-radius: 8px; }
 .tabs b { display: block; font-family: var(--serif); font-size: 24px; font-style: italic; font-weight: 400; color: var(--cream); }
@@ -169,7 +173,7 @@ html.static .pin, html.static .anat-lines, html.static .anat-tags li { animation
 .comp { display: flex; flex-direction: column; gap: 22px; }
 .comp-head { display: flex; flex-direction: column; gap: 12px; }
 .tabela { flex: 1; min-height: 0; display: flex; flex-direction: column; border-top: 1px solid var(--line); }
-.tr { flex: 1; display: grid; grid-template-columns: 250px repeat(4, 1fr); align-items: stretch; border-bottom: 1px solid var(--line); }
+.tr { flex: 1; display: grid; grid-template-columns: 250px repeat(3, 1fr); align-items: stretch; border-bottom: 1px solid var(--line); }
 .tr > * { display: flex; align-items: center; padding: 10px 18px; font-size: 19px; line-height: 1.35; color: var(--cream); }
 .tr > b { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); font-weight: 700; padding-left: 0; }
 .th { flex: 0 0 auto; }
@@ -183,7 +187,7 @@ html.static .pin, html.static .anat-lines, html.static .anat-tags li { animation
 
 /* ------------------------------------------------------------- 10 investimento */
 .invest { display: flex; flex-direction: column; gap: 20px; }
-.inv-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 20px; }
+.inv-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 20px; }
 .inv-cards article { display: flex; flex-direction: column; gap: 10px; padding: 22px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255, 255, 255, .03); }
 .inv-cards img { width: 90px; height: 140px; object-fit: cover; border-radius: 8px; }
 .inv-cards b { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 30px; }
@@ -193,7 +197,7 @@ html.static .pin, html.static .anat-lines, html.static .anat-tags li { animation
 .fim { display: grid; grid-template-columns: 1fr 400px; grid-template-rows: auto 1fr; gap: 34px 70px; }
 .fim-txt { display: flex; flex-direction: column; gap: 24px; align-self: center; }
 .fim .contato { align-self: center; }
-.faixa { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; min-height: 0; }
+.faixa { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; min-height: 0; }
 .faixa figure { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); cursor: pointer; min-height: 0; }
 .faixa img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
 .faixa figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 14px 10px; font-family: var(--serif); font-style: italic; font-size: 24px; background: linear-gradient(transparent, rgba(12, 8, 6, .85)); }
@@ -229,6 +233,33 @@ html.static .pin, html.static .anat-lines, html.static .anat-tags li { animation
 .lb img { max-width: 100%; max-height: 100%; border-radius: 10px; }
 .lb button { position: absolute; top: 14px; right: 22px; font-size: 38px; line-height: 1; color: var(--cream); padding: 6px 10px; }
 
+/* ------------------------------------------------------------- realidade aumentada */
+.ar { display: flex; gap: 44px; align-items: stretch; }
+.ar-3d { position: relative; flex: 1; min-width: 0; border-radius: 18px; background: radial-gradient(56% 58% at 50% 46%, rgba(216, 178, 110, .19), transparent 72%); }
+.ar-3d model-viewer { position: absolute; inset: 0; width: 100%; height: 100%; background: transparent; --poster-color: transparent; outline: none; cursor: grab; }
+.ar-3d model-viewer:active { cursor: grabbing; }
+.ar-rotulo { position: absolute; left: 10px; bottom: 8px; display: flex; align-items: baseline; gap: 10px; font-size: 15px; color: var(--muted); pointer-events: none; }
+.ar-rotulo b { font-family: var(--serif); font-size: 34px; font-style: italic; font-weight: 400; color: var(--cream); }
+.ar-hint { position: absolute; right: 10px; bottom: 14px; font-size: 14px; color: var(--muted2); pointer-events: none; }
+.ar-prog { position: absolute; left: 10px; right: 10px; bottom: 0; height: 2px; background: var(--line); transition: opacity .5s; pointer-events: none; }
+.ar-prog i { display: block; width: 0; height: 100%; background: var(--gold); transition: width .25s; }
+.ar-prog.done { opacity: 0; }
+.ar-txt { flex: 0 0 650px; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 18px; }
+.ar-txt .lede { font-size: 20px; }
+.ar-tabs { margin-top: 2px; grid-template-columns: repeat(3, 1fr); }
+.ar-tabs button { padding: 7px; }
+.ar-tabs button img { width: 42px; height: 65px; }
+.ar-qr { display: flex; align-items: center; gap: 24px; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255, 255, 255, .025); }
+.ar-qr img { flex: none; width: 172px; height: 172px; padding: 11px; border-radius: 10px; background: #fff8ec; }
+.ar-passos { list-style: none; padding: 0; display: grid; gap: 8px; font-size: 16.5px; line-height: 1.35; }
+.ar-passos li { display: flex; gap: 10px; align-items: baseline; }
+.ar-passos i { flex: none; width: 14px; font-family: var(--serif); font-size: 20px; color: var(--gold); }
+.ar-passos b { font-weight: 600; color: var(--gold2); }
+.ar-nota { margin-top: 12px; font-size: 14px; line-height: 1.4; color: var(--muted2); }
+.ar-nota a { color: var(--gold); white-space: nowrap; }
+.ar-cta { display: none; align-items: center; justify-content: center; gap: 10px; padding: 15px; border-radius: 14px; background: var(--red); color: #fff; font-weight: 600; font-size: 18px; text-decoration: none; }
+.ar-cta svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
 /* ------------------------------------------------------------- celular: rolagem vertical */
 html.m body { overflow: auto; background: var(--bg); }
 html.m #stage { position: static; transform: none; width: auto !important; height: auto !important; overflow: visible; }
@@ -238,10 +269,18 @@ html.m .pager, html.m .prog { display: none; }
 html.m h1 { font-size: 46px; }
 html.m h2 { font-size: 38px; }
 html.m .lede { font-size: 18px; }
-html.m .capa-txt { display: flex; flex-direction: column; gap: 12px; }
-html.m .capa-legenda { display: none; }
-html.m .lineup { display: grid; grid-template-columns: 1fr 1fr; height: auto; gap: 12px; }
-html.m .lu { height: auto; width: 100%; }
+html.m .capa { padding-bottom: 0; }
+html.m .capa-txt { margin: 0; max-width: none; }
+html.m .capa h1 { font-size: 46px; }
+html.m .capa .lede { margin-top: 16px; }
+html.m .capa-foto { position: static; order: 2; width: calc(100% + 40px); max-width: none; min-height: 0; margin: 0 -20px; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 22%); mask-image: linear-gradient(180deg, transparent 0, #000 22%); }
+html.m .ar-3d { order: 2; flex: none; height: 66vh; min-height: 420px; }
+html.m .ar-txt { flex: none; }
+html.m .ar-tabs { grid-template-columns: 1fr; }
+html.m .ar-qr { display: none; }
+html.m .ar-cta { display: flex; }
+html.m .ver-acoes { align-self: stretch; }
+html.m .ver-acoes .ver-loja { flex: 1 1 100%; }
 html.m .foto-atual, html.m .ver-fig, html.m .cmp { height: auto; width: 100%; max-width: 440px; margin: 0 auto; }
 html.m .padrao-txt, html.m .loja-txt { flex: none; }
 html.m .anat { height: 640px; flex: none; }
@@ -254,7 +293,7 @@ html.m .tabela { overflow-x: auto; }
 html.m .tr { min-width: 860px; }
 html.m .passos { grid-template-columns: 1fr; }
 html.m .fim { display: flex; }
-html.m .faixa { grid-template-columns: 1fr 1fr; }
+html.m .faixa { grid-template-columns: repeat(3, 1fr); }
 html.m .faixa figure { aspect-ratio: 3 / 4; }
 html.m .contato { flex: none; }
 html.m .inv-cards { grid-template-columns: 1fr 1fr; }

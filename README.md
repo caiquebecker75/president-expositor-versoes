@@ -1,23 +1,23 @@
-# Expositor Président · 4 versões — apresentação 75LAB
+# Expositor Président · 3 versões — apresentação 75LAB
 
-Deck para apresentar ao vivo à Lactalis / Président as quatro versões do novo expositor de parmesão da rede Festval: MDF, Aramado, ACM e Metalon, cada uma comparada ao expositor atual (aramado vermelho).
+Deck para apresentar ao vivo à Lactalis / Président as três versões do novo expositor de parmesão da rede Festval: MDF, Aramado e Metalon, cada uma comparada ao expositor atual (aramado vermelho).
 
 Publicado em https://projetos.75lab.com.br/president-expositor-versoes/
 
 ## Telas (10)
 
-1. Capa com as quatro versões
+1. Capa com o parmesão (sem as versões)
 2. O expositor atual, com 5 pontos fracos marcados na foto
-3. O que as quatro versões têm em comum (anatomia com as zonas)
+3. O que as três versões têm em comum (anatomia com as zonas, sobre o Metalon)
 4. MDF
 5. Aramado
-6. ACM
-7. Metalon
-8. Na loja: antes × depois arrastável na foto real do ponto, com abas para as 4 versões
+6. Metalon
+7. Na loja: antes × depois arrastável na foto real do ponto, com abas para as 3 versões
+8. Realidade aumentada: 3D girável na tela e QR por versão para ver no celular em tamanho real
 9. Comparativo lado a lado (estrutura, visual, notas de 1 a 5, indicação)
 10. Próximos passos + contato da Vanessa Morelli
 
-A tela **Investimento** (`#investimento`) está pronta e oculta com `data-draft`: abra com `?draft` para ver. Para publicar, troque os quatro "R$ —" pelos valores e remova `data-draft`.
+A tela **Investimento** (`#investimento`) está pronta e oculta com `data-draft`: abra com `?draft` para ver. Para publicar, troque os três "R$ —" pelos valores e remova `data-draft`.
 
 ## Navegação
 
@@ -26,11 +26,25 @@ QA: `?static` (sem movimento), `?draft`, `?desktop`, `?ar=2.2`. Ferramentas em `
 
 ## Imagens
 
-- `assets/img/versoes/`: as quatro versões enviadas pelo cliente (com as cotas 140 × 40 × 30 cm).
+- `assets/img/capa/`: parmesão da capa, gerado no ChatGPT, sem marca nem embalagem.
+- `assets/img/versoes/`: as versões enviadas pelo cliente (com as cotas 140 × 40 × 30 cm).
 - `assets/img/loja/`: fotomontagens geradas no ChatGPT a partir da foto real do ponto na Festval (`atual.webp`) e de cada versão, alinhadas à foto atual por `tools/align.cjs`. São simulações; produtos e embalagens são ilustrativos.
+- `assets/img/ar/`: um QR por versão, apontando para a página de AR.
 - Os originais (PNG) ficam fora do repositório (`.gitignore`).
+
+## Realidade aumentada
+
+A tela usa o visualizador, o fundo e os modelos da página https://projetos.75lab.com.br/ar/lactalis-president-displays-parmesao/ (outro repositório, mesmo domínio): ajustes feitos lá aparecem aqui. Só carrega ao entrar na tela e precisa de internet. Correspondência entre versão e modelo, em `AR` no `deck.js`:
+
+- MDF = `pr01` (Madeira Curva)
+- Aramado = `pr04` (Aramado Preto)
+- Metalon = `pr03` (Madeira e Dourado)
+
+## Versão retirada
+
+O ACM (champanhe com acrílico) saiu em 04/11/2026 a pedido da 75LAB. Os arquivos ficam no histórico do git (commit anterior) e os originais em `assets/img/src/` e `assets/img/loja/`. Na página de AR ele ainda existe como `pr02` (Champanhe e Acrílico).
 
 ## Pendências
 
 - Valores de cada versão para a tela de investimento.
-- As notas de 1 a 5 do comparativo são avaliação 75LAB entre as quatro versões; revisar se o cliente pedir critérios diferentes.
+- As notas de 1 a 5 do comparativo são avaliação 75LAB entre as versões; revisar se o cliente pedir critérios diferentes.

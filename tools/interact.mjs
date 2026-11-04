@@ -5,11 +5,11 @@ import path from 'path';
 import http from 'http';
 
 const ROOT = process.cwd();
-const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg' };
+const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml' };
 const srv = http.createServer((q, s) => { let f = path.join(ROOT, decodeURIComponent(q.url.split('?')[0])); if (f.endsWith(path.sep)) f += 'index.html'; if (!fs.existsSync(f)) { s.writeHead(404); return s.end(); } s.writeHead(200, { 'Content-Type': MIME[path.extname(f)] || 'application/octet-stream' }); fs.createReadStream(f).pipe(s); }).listen(8132);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const port = 9342;
-const chrome = spawn('C:/Program Files/Google/Chrome/Application/chrome.exe', ['--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${path.resolve('tools/_qa/chrome2')}`, 'about:blank'], { stdio: 'ignore' });
+const chrome = spawn('C:/Program Files/Google/Chrome/Application/chrome.exe', ['--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${path.resolve('tools/_qa/chrome2')}`, '--enable-unsafe-swiftshader', 'about:blank'], { stdio: 'ignore' });
 for (let i = 0; i < 60; i++) { try { if ((await fetch(`http://127.0.0.1:${port}/json/version`)).ok) break; } catch { } await sleep(250); }
 const t = await (await fetch(`http://127.0.0.1:${port}/json/new?about:blank`, { method: 'PUT' })).json();
 const ws = new WebSocket(t.webSocketDebuggerUrl); await new Promise(r => ws.onopen = r);
@@ -30,20 +30,47 @@ const mid = await send('Page.captureScreenshot', { format: 'jpeg', quality: 70 }
 await sleep(1200); console.log('após →:', await active());
 await click(1560, 450); await sleep(1500); console.log('clique na borda direita:', await active());
 await ev(`location.hash='loja'`); await sleep(1800); console.log('hash #loja:', await active());
-await ev(`document.querySelector('.tabs [data-tab="acm"]').click()`); await sleep(300);
-console.log('aba ACM:', await ev(`document.querySelector('.cmp-depois').getAttribute('src') + ' | ' + document.getElementById('cmpName').textContent + ' | notas ' + document.querySelectorAll('#lojaNotas li').length`));
+await ev(`document.querySelector('.loja-txt [data-tab="metalon"]').click()`); await sleep(300);
+console.log('aba Metalon:', await ev(`document.querySelector('.cmp-depois').getAttribute('src') + ' | ' + document.getElementById('cmpName').textContent + ' | notas ' + document.querySelectorAll('#lojaNotas li').length`));
 const r = await ev(`(()=>{const b=document.getElementById('cmp').getBoundingClientRect();return [b.left,b.top,b.width,b.height]})()`);
 await send('Input.dispatchMouseEvent', { type: 'mousePressed', x: r[0] + r[2] * .5, y: r[1] + r[3] * .5, button: 'left', clickCount: 1 });
 await send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: r[0] + r[2] * .2, y: r[1] + r[3] * .5, button: 'left', buttons: 1 });
 await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x: r[0] + r[2] * .2, y: r[1] + r[3] * .5, button: 'left', clickCount: 1 });
 console.log('arraste para 20%:', await ev(`getComputedStyle(document.getElementById('cmp')).getPropertyValue('--p')`));
-const end = await send('Page.captureScreenshot', { format: 'jpeg', quality: 75 }); fs.writeFileSync('tools/_qa/loja-acm.jpg', Buffer.from(end.result.data, 'base64'));
+const end = await send('Page.captureScreenshot', { format: 'jpeg', quality: 75 }); fs.writeFileSync('tools/_qa/loja-metalon.jpg', Buffer.from(end.result.data, 'base64'));
 await ev(`location.hash='mdf'`); await sleep(1500);
 await ev(`document.querySelector('#mdf .ver-loja').click()`); await sleep(1600);
 console.log('botão "Ver na loja" do MDF:', await active(), '|', await ev(`document.getElementById('cmpName').textContent`));
 await key('m'); await sleep(300); console.log('índice aberto:', await ev(`document.getElementById('menu').classList.contains('open') + ' itens ' + document.querySelectorAll('#menuL li').length`));
 await key('Escape'); await sleep(200);
-await ev(`location.hash='acm'`); await sleep(1500); await ev(`document.querySelector('#acm .ver-fig').click()`); await sleep(300);
+await ev(`location.hash='metalon'`); await sleep(1500); await ev(`document.querySelector('#metalon .ver-fig').click()`); await sleep(300);
 console.log('lightbox:', await ev(`document.getElementById('lb').classList.contains('open')`));
+await ev(`document.getElementById('lb').classList.remove('open')`);
+// realidade aumentada: botão da versão, 3D carregado, abas, QR, arraste no modelo e teclado
+await ev(`location.hash='metalon'`); await sleep(1500);
+await ev(`document.querySelector('#metalon .ver-ar').click()`); await sleep(1600);
+const arEstado = () => ev(`(()=>{const v=document.getElementById('arView');return JSON.stringify({tela:document.querySelector('.slide.is-active.is-in')?.id,def:!!customElements.get('model-viewer'),src:v.getAttribute('src'),loaded:!!v.loaded,giro:v.hasAttribute('auto-rotate'),qr:document.getElementById('arQr').getAttribute('src'),link:document.querySelector('.ar-nota a').href,nome:document.getElementById('arNome').textContent})})()`);
+console.log('botão AR do Metalon:', await arEstado());
+for (let i = 0; i < 80 && !(await ev(`!!document.getElementById('arView').loaded`)); i++) await sleep(500);
+console.log('3D carregado:', await arEstado());
+await sleep(1200);
+const a1 = await send('Page.captureScreenshot', { format: 'jpeg', quality: 80 }); fs.writeFileSync('tools/_qa/ar-metalon.jpg', Buffer.from(a1.result.data, 'base64'));
+const box = await ev(`(()=>{const b=document.querySelector('.ar-3d').getBoundingClientRect();return [b.left,b.top,b.width,b.height]})()`);
+const orb0 = await ev(`document.getElementById('arView').getCameraOrbit().theta`);
+await send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: box[0] + box[2] * .5, y: box[1] + box[3] * .5 });
+await send('Input.dispatchMouseEvent', { type: 'mousePressed', x: box[0] + box[2] * .5, y: box[1] + box[3] * .5, button: 'left', buttons: 1, clickCount: 1 });
+for (let i = 1; i <= 6; i++) { await send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: box[0] + box[2] * .5 + i * 30, y: box[1] + box[3] * .5, button: 'left', buttons: 1 }); await sleep(40); }
+await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x: box[0] + box[2] * .5 + 180, y: box[1] + box[3] * .5, button: 'left', clickCount: 1 });
+await sleep(500);
+console.log('arraste no 3D: theta', orb0, '→', await ev(`document.getElementById('arView').getCameraOrbit().theta`), '| tela', await active());
+await click(box[0] + 30, box[1] + box[3] * .3); await sleep(500);
+console.log('clique na borda esquerda sobre o 3D (não muda de tela):', await active());
+await ev(`document.querySelector('.ar-tabs [data-ar="aramado"]').click()`); await sleep(300);
+console.log('aba Aramado:', await arEstado());
+for (let i = 0; i < 80; i++) { if (await ev(`(()=>{const v=document.getElementById('arView');return !!v.loaded&&v.getAttribute('src').includes('pr04')})()`)) break; await sleep(500); }
+await sleep(1200);
+const a2 = await send('Page.captureScreenshot', { format: 'jpeg', quality: 80 }); fs.writeFileSync('tools/_qa/ar-aramado.jpg', Buffer.from(a2.result.data, 'base64'));
+await key('ArrowRight'); await sleep(1500); console.log('→ com foco no 3D:', await active(), '| gira fora da tela:', await ev(`document.getElementById('arView').hasAttribute('auto-rotate')`));
+await key('ArrowLeft'); await sleep(1500); console.log('← volta:', await active(), '| gira:', await ev(`document.getElementById('arView').hasAttribute('auto-rotate')`));
 console.log(logs.join('\n') || 'sem erros de script');
 ws.close(); chrome.kill(); srv.close();
