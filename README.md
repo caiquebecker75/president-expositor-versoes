@@ -42,7 +42,7 @@ A tela usa o visualizador, o fundo e os modelos da página https://projetos.75la
 
 ## Versão retirada
 
-O ACM (champanhe com acrílico) saiu em 04/11/2026 a pedido da 75LAB. Os arquivos ficam no histórico do git (commit anterior) e os originais em `assets/img/src/` e `assets/img/loja/`. Na página de AR ele ainda existe como `pr02` (Champanhe e Acrílico).
+O ACM (champanhe com acrílico) saiu em 04/11/2026 a pedido da 75LAB. Os arquivos ficam no histórico do git (commit anterior) e os originais em `assets/img/src/` e `assets/img/loja/`. Da página de AR ele saiu no mesmo dia (`pr02`, Champanhe e Acrílico); os arquivos seguem no histórico do repositório `caiquebecker75/ar`.
 
 ## Pendências
 
