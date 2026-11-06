@@ -95,8 +95,8 @@ function layoutAnat() {
    --------------------------------------------------------------------- */
 const LOJA = {
   mdf: { nome: 'MDF', notas: ['A madeira clara conversa com o piso e as gôndolas da Festval.', 'A marca aparece no topo, na lateral e no rodapé.', 'O ralado fica em três fileiras, separado por gramatura.'] },
-  aramado: { nome: 'Aramado', notas: ['O preto sai do caminho e deixa as embalagens em primeiro plano.', 'O painel lateral com parmesão e massa chama quem vem pelo corredor.', 'Cestos com faixa de preço para cada produto.'] },
-  metalon: { nome: 'Metalon', notas: ['Moldura amadeirada com filete dourado, no padrão da loja.', 'Estrutura firme, que não balança com o movimento do corredor.', 'Ganchos dourados alinhados por gramatura.'] },
+  aramado: { nome: 'Aramado', notas: ['O preto sai do caminho e deixa as embalagens em primeiro plano.', 'O painel lateral com parmesão e massa chama quem vem pelo corredor.', 'Cestos aramados com faixa de preço para os pedaços.'] },
+  metalon: { nome: 'Metalon', notas: ['Moldura amadeirada envolvendo os painéis vermelhos, no padrão da loja.', 'Estrutura firme, que não balança com o movimento do corredor.', 'Ganchos dourados alinhados por gramatura.'] },
 };
 const cmp = $('#cmp');
 let cmpTab = 'mdf';

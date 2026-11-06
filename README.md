@@ -8,7 +8,7 @@ Publicado em https://projetos.75lab.com.br/president-expositor-versoes/
 
 1. Capa com o parmesão (sem as versões)
 2. O expositor atual, com 5 pontos fracos marcados na foto
-3. O que as três versões têm em comum (anatomia com as zonas, sobre o Metalon)
+3. O que as três versões têm em comum (anatomia com as zonas, sobre o render do Metalon)
 4. MDF
 5. Aramado
 6. Metalon
@@ -27,10 +27,21 @@ QA: `?static` (sem movimento), `?draft`, `?desktop`, `?ar=2.2`. Ferramentas em `
 ## Imagens
 
 - `assets/img/capa/`: parmesão da capa, gerado no ChatGPT, sem marca nem embalagem.
-- `assets/img/versoes/`: as versões enviadas pelo cliente (com as cotas 140 × 40 × 30 cm).
-- `assets/img/loja/`: fotomontagens geradas no ChatGPT a partir da foto real do ponto na Festval (`atual.webp`) e de cada versão, alinhadas à foto atual por `tools/align.cjs`. Na do MDF, `tools/retoque-mdf.cjs` tira o pé de cima da base preta da gôndola vizinha, com o chão e a base vindos da montagem do Aramado, então a base ali não curva como na foto real. São simulações; produtos e embalagens são ilustrativos.
+Desde 06/11/2026 todas as imagens das versões saem dos **mesmos modelos 3D da página de AR** (`pr01`, `pr04`, `pr03`), renderizados com o mesmo visualizador e a mesma luz. O que o cliente vê nas telas é o que ele vê no celular.
+
+- `assets/img/capa/`: parmesão da capa, gerado no ChatGPT, sem marca nem embalagem.
+- `assets/img/versoes/`: render de estúdio de cada modelo, com as cotas 140 × 40 × 30 cm desenhadas sobre os cantos reais da caixa (`tools/versoes-ar.mjs`).
+- `assets/img/loja/`: `atual.webp` é a foto real do ponto na Festval. As montagens põem o render de cada modelo sobre essa foto, com a câmera encaixada no ponto do expositor atual (`tools/loja-ar.cjs`). A foto fica intacta: só o expositor antigo sai, e onde ele aparece fora do display novo o fundo é refeito com pedaços da própria foto (parede, gôndola de massas, Rap10, chão). Nada é desenhado por IA. A ferramenta confere que, fora do expositor antigo e do display novo, nenhum pixel mudou.
 - `assets/img/ar/`: um QR por versão, apontando para a página de AR.
 - Os originais (PNG) ficam fora do repositório (`.gitignore`).
+
+Para refazer as imagens (Chrome instalado; `NODE_PATH` aponta para um `node_modules` com `sharp`):
+
+```
+node tools/render-ar.mjs tools/tomadas.json     # renders e posição dos cantos em tools/_qa/render/
+node tools/versoes-ar.mjs                       # imagens das versões e miniaturas
+node tools/loja-ar.cjs                          # montagens na loja
+```
 
 ## Realidade aumentada
 

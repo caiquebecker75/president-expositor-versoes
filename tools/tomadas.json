@@ -1,0 +1,8 @@
+[
+  { "id": "estudio-mdf", "modelo": "pr01", "w": 1340, "h": 2087, "orbita": "-30deg 80deg 4.5m", "alvo": "0.02m 0.66m 0m", "fov": "22deg" },
+  { "id": "estudio-aramado", "modelo": "pr04", "w": 1340, "h": 2087, "orbita": "-30deg 80deg 4.5m", "alvo": "0.02m 0.66m 0m", "fov": "22deg" },
+  { "id": "estudio-metalon", "modelo": "pr03", "w": 1340, "h": 2087, "orbita": "-30deg 80deg 4.5m", "alvo": "0.02m 0.66m 0m", "fov": "22deg" },
+  { "id": "loja-mdf", "modelo": "pr01", "w": 1350, "h": 2400, "orbita": "-5deg 90deg 1.30m", "alvo": "0.015m 0.764m 0m", "fov": "65deg", "sombra": 0 },
+  { "id": "loja-aramado", "modelo": "pr04", "w": 1350, "h": 2400, "orbita": "-5deg 90deg 1.30m", "alvo": "0.015m 0.764m 0m", "fov": "65deg", "sombra": 0 },
+  { "id": "loja-metalon", "modelo": "pr03", "w": 1350, "h": 2400, "orbita": "-5deg 90deg 1.30m", "alvo": "0.015m 0.764m 0m", "fov": "65deg", "sombra": 0 }
+]
